@@ -1,16 +1,60 @@
-# capsula_flutter
+# Flame Game
 
-A new Flutter project.
+A new Flutter project using Flame.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Follow these steps to set up and run the project:
 
-A few resources to get you started if this is your first Flutter project:
+1. Install the required dependencies:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+   ```bash
+   flutter pub get
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. Compile the protocol buffer definitions:
+
+   ```bash
+   protoc --dart_out=lib/gen/ protos/message.proto
+   ```
+
+3. Generate proto list
+
+   ```bash
+   dart run tools/generate_proto_list.dart
+   ```
+
+4. Generate l10n:
+
+   ```bash
+   flutter gen-l10n
+   ```
+
+5. Generate pubspec
+
+   ```bash
+   fluttergen -c pubspec.yaml
+   ```
+
+6. Watch for changes and automatically rebuild:
+
+   ```bash
+   flutter pub run build_runner watch
+   ```
+
+## Project Structure
+
+- `lib/`: Contains the main application code.
+- `protos/`: Contains the protocol buffer definitions.
+
+## Running the App
+
+To run the app on an emulator or a physical device, use the following command:
+
+```bash
+flutter run
+```
+
+## License
+
+This project is licensed under the MIT License

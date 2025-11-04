@@ -1,0 +1,10 @@
+{
+    "@@locale": "zh_TW",
+    "language": "中文繁體",
+    "app_name": "商城",
+    "home": "主页",
+    "live": "直播",
+    "message": "消息",
+    "cart": "购物车",
+    "setting": "我的"
+}

@@ -1,0 +1,31 @@
+{
+    "@@locale": "en",
+    "language": "English",
+    "@language": {
+        "description": "The current Language"
+    },
+    "app_name": "Shopping",
+    "@app_name": {
+        "description": "The app Name"
+    },
+    "home": "Home",
+    "@home": {
+        "description": "home page"
+    },
+    "live": "Live",
+    "@live": {
+        "description": "live page"
+    },
+    "message": "Message",
+    "@message": {
+        "description": "message page"
+    },
+    "cart": "Cart",
+    "@cart": {
+        "description": "shopping cart page"
+    },
+    "setting": "Setting",
+    "@setting": {
+        "description": "setting page"
+    }
+}
