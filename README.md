@@ -12,31 +12,19 @@ Follow these steps to set up and run the project:
    flutter pub get
    ```
 
-2. Compile the protocol buffer definitions:
-
-   ```bash
-   protoc --dart_out=lib/gen/ protos/message.proto
-   ```
-
-3. Generate proto list
-
-   ```bash
-   dart run tools/generate_proto_list.dart
-   ```
-
-4. Generate l10n:
+2. Generate l10n:
 
    ```bash
    flutter gen-l10n
    ```
 
-5. Generate pubspec
+3. Generate pubspec
 
    ```bash
    fluttergen -c pubspec.yaml
    ```
 
-6. Watch for changes and automatically rebuild:
+4. Watch for changes and automatically rebuild:
 
    ```bash
    flutter pub run build_runner watch

@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:capsula_flutter/l10n.dart';
 import 'package:intl/intl.dart';
-import '../providers/locale_provider.dart';
 
 class Formatters {
   static String formatDate(DateTime? date) {
@@ -8,11 +8,15 @@ class Formatters {
     return DateFormat('dd-MMM-yyyy').format(date);
   }
 
-  static String formatCurrency(double amount) {
-    final locale = LocaleProvider().locale;
+  /// Format currency with locale support
+  /// Pass the [locale] parameter from ref.watch(localeProvider)
+  static String formatCurrency(double amount, {Locale? locale}) {
+    if (locale == null) {
+      return NumberFormat.currency(symbol: '\$').format(amount);
+    }
     return NumberFormat.currency(
       locale: locale.toString(),
-      symbol: L10n.getCurrencySymbol(locale!),
+      symbol: L10n.getCurrencySymbol(locale),
     ).format(amount);
   }
 

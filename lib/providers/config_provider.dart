@@ -19,7 +19,3 @@ class Config {
 Config config(Ref ref) {
   return Config();
 }
-
-// final configProvider = Provider<Config>((ref) {
-//   return Config();
-// });

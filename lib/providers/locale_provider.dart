@@ -1,25 +1,45 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/legacy.dart';
+import 'dart:ui';
+import 'dart:io';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../l10n.dart';
 
-class LocaleProvider extends ChangeNotifier {
-  LocaleProvider._internal();
-  static final LocaleProvider _instance = LocaleProvider._internal();
-  factory LocaleProvider() => _instance;
+part 'locale_provider.g.dart';
 
-  Locale? _locale;
-  Locale? get locale => _locale;
-
-  void setLocale(Locale locale) {
-    _locale = locale;
-    notifyListeners();
+/// Locale state management using Riverpod 3.0 Notifier pattern
+@riverpod
+class LocaleNotifier extends _$LocaleNotifier {
+  @override
+  Locale build() {
+    // Get system locale and find the best match from supported locales
+    final systemLocale = PlatformDispatcher.instance.locales;
+    print('System Locale: ${Platform.localeName}');
+    // return systemLocale;
+    return _findBestMatchLocale(systemLocale.first);
   }
 
-  void clearLocale() {
-    _locale = null;
-    notifyListeners();
+  /// Find the best matching locale from supported locales
+  Locale _findBestMatchLocale(Locale systemLocale) {
+    // Check if exact match exists
+    for (final locale in L10n.all) {
+      if (locale.languageCode == systemLocale.languageCode &&
+          locale.countryCode == systemLocale.countryCode) {
+        return locale;
+      }
+    }
+
+    // Check if language code matches (ignore country)
+    for (final locale in L10n.all) {
+      if (locale.languageCode == systemLocale.languageCode) {
+        return locale;
+      }
+    }
+
+    // Fallback to first supported locale (en_US)
+    return L10n.all.first;
+  }
+
+  /// Set the app locale
+  void setLocale(Locale locale) {
+    state = locale;
   }
 }
-
-final localProvider = ChangeNotifierProvider<LocaleProvider>((ref) {
-  return LocaleProvider();
-});

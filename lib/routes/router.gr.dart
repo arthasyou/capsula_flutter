@@ -11,22 +11,6 @@
 part of 'router.dart';
 
 /// generated route for
-/// [AppPage]
-class AppRoute extends PageRouteInfo<void> {
-  const AppRoute({List<PageRouteInfo>? children})
-    : super(AppRoute.name, initialChildren: children);
-
-  static const String name = 'AppRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const AppPage();
-    },
-  );
-}
-
-/// generated route for
 /// [CartPage]
 class CartRoute extends PageRouteInfo<void> {
   const CartRoute({List<PageRouteInfo>? children})
@@ -75,6 +59,22 @@ class LiveRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MainTabLayoutPage]
+class MainTabLayoutRoute extends PageRouteInfo<void> {
+  const MainTabLayoutRoute({List<PageRouteInfo>? children})
+    : super(MainTabLayoutRoute.name, initialChildren: children);
+
+  static const String name = 'MainTabLayoutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainTabLayoutPage();
+    },
+  );
+}
+
+/// generated route for
 /// [MePage]
 class MeRoute extends PageRouteInfo<void> {
   const MeRoute({List<PageRouteInfo>? children})
@@ -102,22 +102,6 @@ class MessageRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MessagePage();
-    },
-  );
-}
-
-/// generated route for
-/// [RootPage]
-class RootRoute extends PageRouteInfo<void> {
-  const RootRoute({List<PageRouteInfo>? children})
-    : super(RootRoute.name, initialChildren: children);
-
-  static const String name = 'RootRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const RootPage();
     },
   );
 }

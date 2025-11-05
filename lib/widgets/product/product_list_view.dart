@@ -1,67 +1,65 @@
+import 'package:capsula_flutter/providers/product_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:capsula_flutter/models/product_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/product_provider.dart';
 import 'products.dart';
 
-class ProductListView extends ConsumerWidget {
+class ProductListView extends ConsumerStatefulWidget {
   const ProductListView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ScrollController scrollController = ScrollController();
+  ConsumerState<ProductListView> createState() => _ProductListViewState();
+}
 
-    Future<void> loadMoreProducts() async {
-      if (ref.read(productsProvider).isLoading) return;
-      ref.read(productsProvider).setIsLoding(true);
+class _ProductListViewState extends ConsumerState<ProductListView> {
+  late final ScrollController _scrollController;
 
-      // 模拟网络请求延迟
-      await Future.delayed(const Duration(seconds: 2));
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
 
-      // 加载更多数据
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-      ref.read(productsProvider).addProducts([
-        ProductModel(
-          imagePath: 'assets/images/flutter_logo.png',
-          title: '飞利浦 原装光盘 4.7G DVD-R 16X DVD刻录盘',
-          price: '¥18.9',
-        ),
-      ]);
-      ref.read(productsProvider).setIsLoding(false);
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Call the loadMore method from the provider
+      ref.read(productsProvider.notifier).loadMore();
     }
+  }
 
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        loadMoreProducts();
-      }
-    });
+  @override
+  Widget build(BuildContext context) {
+    final productsState = ref.watch(productsProvider);
 
-    return Consumer(
-      builder: (context, ref, child) {
-        final provider = ref.watch(productsProvider);
-        return Expanded(
-          child: GridView.builder(
-            controller: scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-            ),
-            itemCount: provider.products.length + (provider.isLoading ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == provider.products.length) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return ProductCard(
-                imagePath: provider.products[index].imagePath,
-                title: provider.products[index].title,
-                price: provider.products[index].price,
-              );
-            },
-          ),
-        );
-      },
+    return Expanded(
+      child: GridView.builder(
+        controller: _scrollController,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+        ),
+        itemCount:
+            productsState.products.length + (productsState.isLoading ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index == productsState.products.length) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final product = productsState.products[index];
+          return ProductCard(
+            imagePath: product.imagePath,
+            title: product.title,
+            price: product.price,
+          );
+        },
+      ),
     );
   }
 }

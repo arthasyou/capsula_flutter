@@ -27,17 +27,11 @@ class SignInPage extends StatelessWidget {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
-                      context.router.pop();
-                      // ref.read(authNotifierProvider.notifier).signIn(
-                      //   (authorizationUrl) {
-                      //     final completer = Completer<Uri>();
-                      //     AutoRouter.of(context)
-                      //         .push(const AuthorizationRoute());
-                      //   },
-                      // );
+                      // TODO: Implement authentication logic
+                      context.router.replacePath('/');
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      backgroundColor: WidgetStateProperty.all(Colors.green),
                     ),
                     child: const Text('Sign In'),
                   ),

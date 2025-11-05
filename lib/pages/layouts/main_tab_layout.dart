@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../gen/app_localizations.dart';
-import '../routes/router.dart';
-import '../widgets/language_widget.dart';
+import '../../gen/app_localizations.dart';
+import '../../routes/router.dart';
+import '../../widgets/language_widget.dart';
 
 @RoutePage()
-class RootPage extends StatelessWidget {
-  const RootPage({super.key});
+class MainTabLayoutPage extends StatelessWidget {
+  const MainTabLayoutPage({super.key});
 
   // int currentPage = 0;
   @override
