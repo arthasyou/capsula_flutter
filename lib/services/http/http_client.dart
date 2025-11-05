@@ -2,9 +2,52 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 class HttpClient {
-  final Dio _dio;
+  late final Dio _dio;
 
-  HttpClient(this._dio);
+  /// Create HttpClient with JSON configuration
+  HttpClient.json({
+    required String baseUrl,
+    Duration connectTimeout = const Duration(seconds: 30),
+    Duration receiveTimeout = const Duration(seconds: 30),
+    Map<String, dynamic>? headers,
+  }) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          ...?headers,
+        },
+      ),
+    );
+  }
+
+  /// Create HttpClient for file upload (multipart/form-data)
+  HttpClient.upload({
+    String? baseUrl,
+    Duration connectTimeout = const Duration(seconds: 60),
+    Duration receiveTimeout = const Duration(seconds: 60),
+    Map<String, dynamic>? headers,
+  }) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl ?? '',  // 使用空字符串作为默认值（上传到S3时使用完整URL）
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout,
+        headers: {
+          'Accept': 'application/json',
+          ...?headers,
+        },
+        // Content-Type will be set automatically to multipart/form-data
+      ),
+    );
+  }
+
+  /// Get internal Dio instance (for advanced usage like adding interceptors)
+  Dio get dio => _dio;
 
   // ==================== JSON Requests ====================
 
@@ -26,12 +69,14 @@ class HttpClient {
     String url, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    ProgressCallback? onSendProgress,
   }) async {
     try {
       final response = await _dio.post(
         url,
         data: data,
         queryParameters: queryParameters,
+        onSendProgress: onSendProgress,
       );
       return response;
     } catch (e) {

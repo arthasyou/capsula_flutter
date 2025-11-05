@@ -5,79 +5,38 @@ import 'http_client.dart';
 class _ApiService {
   static _ApiService? _instance;
 
-  // Base服务器（默认）
-  late final HttpClient _baseJsonClient;
-  late final HttpClient _baseUploadClient;
-  late final Dio _baseJsonDio;
-  late final Dio _baseUploadDio;
+  // Base服务器 - 业务API（JSON）
+  late final HttpClient _baseHttpClient;
 
-  // Auth服务器
-  late final HttpClient _authJsonClient;
-  late final HttpClient _authUploadClient;
-  late final Dio _authJsonDio;
-  late final Dio _authUploadDio;
+  // Auth服务器 - 认证API（JSON）
+  late final HttpClient _authHttpClient;
 
-  // File服务器
-  late final HttpClient _fileJsonClient;
-  late final HttpClient _fileUploadClient;
-  late final Dio _fileJsonDio;
-  late final Dio _fileUploadDio;
+  // File服务器 - 文件管理API（JSON）
+  late final HttpClient _fileHttpClient;
+
+  // Upload客户端 - 直接上传到S3/OSS（Upload）
+  late final HttpClient _uploadClient;
 
   _ApiService._() {
     final baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://api.example.com';
     final authUrl = dotenv.env['API_AUTH_URL'] ?? baseUrl;
     final fileUrl = dotenv.env['API_FILE_URL'] ?? baseUrl;
 
-    // 初始化Base服务器
-    _baseJsonDio = _createJsonDio(baseUrl);
-    _baseUploadDio = _createUploadDio(baseUrl);
-    _baseJsonClient = HttpClient(_baseJsonDio);
-    _baseUploadClient = HttpClient(_baseUploadDio);
+    // 初始化Base服务器（JSON）
+    _baseHttpClient = HttpClient.json(baseUrl: baseUrl);
+    _addErrorInterceptor(_baseHttpClient.dio);
 
-    // 初始化Auth服务器
-    _authJsonDio = _createJsonDio(authUrl);
-    _authUploadDio = _createUploadDio(authUrl);
-    _authJsonClient = HttpClient(_authJsonDio);
-    _authUploadClient = HttpClient(_authUploadDio);
+    // 初始化Auth服务器（JSON）
+    _authHttpClient = HttpClient.json(baseUrl: authUrl);
+    _addErrorInterceptor(_authHttpClient.dio);
 
-    // 初始化File服务器
-    _fileJsonDio = _createJsonDio(fileUrl);
-    _fileUploadDio = _createUploadDio(fileUrl);
-    _fileJsonClient = HttpClient(_fileJsonDio);
-    _fileUploadClient = HttpClient(_fileUploadDio);
-  }
+    // 初始化File服务器（JSON）
+    _fileHttpClient = HttpClient.json(baseUrl: fileUrl);
+    _addErrorInterceptor(_fileHttpClient.dio);
 
-  // 创建JSON请求的Dio实例
-  Dio _createJsonDio(String baseUrl) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        connectTimeout: const Duration(seconds: 30),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    _addErrorInterceptor(dio);
-    return dio;
-  }
-
-  // 创建文件上传的Dio实例
-  Dio _createUploadDio(String baseUrl) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        connectTimeout: const Duration(seconds: 60), // 上传超时时间更长
-        receiveTimeout: const Duration(seconds: 60),
-        headers: {
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    _addErrorInterceptor(dio);
-    return dio;
+    // 初始化Upload客户端（S3/OSS上传，无baseURL）
+    _uploadClient = HttpClient.upload();
+    _addErrorInterceptor(_uploadClient.dio);
   }
 
   // 添加统一错误处理拦截器
@@ -205,39 +164,22 @@ class _ApiService {
     return _instance!;
   }
 
-  // Base服务器（默认）
-  HttpClient get baseJsonClient => _baseJsonClient;
-  HttpClient get baseUploadClient => _baseUploadClient;
-  Dio get baseJsonDio => _baseJsonDio;
-  Dio get baseUploadDio => _baseUploadDio;
-
-  // Auth服务器
-  HttpClient get authJsonClient => _authJsonClient;
-  HttpClient get authUploadClient => _authUploadClient;
-  Dio get authJsonDio => _authJsonDio;
-  Dio get authUploadDio => _authUploadDio;
-
-  // File服务器
-  HttpClient get fileJsonClient => _fileJsonClient;
-  HttpClient get fileUploadClient => _fileUploadClient;
-  Dio get fileJsonDio => _fileJsonDio;
-  Dio get fileUploadDio => _fileUploadDio;
+  // Getters - 只暴露HttpClient
+  HttpClient get baseHttpClient => _baseHttpClient;
+  HttpClient get authHttpClient => _authHttpClient;
+  HttpClient get fileHttpClient => _fileHttpClient;
+  HttpClient get uploadClient => _uploadClient;
 }
 
-// Global instances - Base服务器（默认）
-final httpClient = _ApiService.instance.baseJsonClient;
-final uploadClient = _ApiService.instance.baseUploadClient;
-final dio = _ApiService.instance.baseJsonDio;
-final uploadDio = _ApiService.instance.baseUploadDio;
+// Global instances - 只暴露HttpClient，Dio完全封装
+// Base服务器 - 业务API（默认）
+final httpClient = _ApiService.instance.baseHttpClient;
 
-// Global instances - Auth服务器
-final authHttpClient = _ApiService.instance.authJsonClient;
-final authUploadClient = _ApiService.instance.authUploadClient;
-final authDio = _ApiService.instance.authJsonDio;
-final authUploadDio = _ApiService.instance.authUploadDio;
+// Auth服务器 - 认证API
+final authHttpClient = _ApiService.instance.authHttpClient;
 
-// Global instances - File服务器
-final fileHttpClient = _ApiService.instance.fileJsonClient;
-final fileUploadClient = _ApiService.instance.fileUploadClient;
-final fileDio = _ApiService.instance.fileJsonDio;
-final fileUploadDio = _ApiService.instance.fileUploadDio;
+// File服务器 - 文件管理API
+final fileHttpClient = _ApiService.instance.fileHttpClient;
+
+// Upload客户端 - S3/OSS直接上传
+final uploadClient = _ApiService.instance.uploadClient;
