@@ -15,9 +15,7 @@ class MainTabLayoutPage extends StatelessWidget {
     return AutoTabsRouter(
       routes: const [
         HomeRoute(),
-        LiveRoute(),
-        MessageRoute(),
-        CartRoute(),
+        HealthDataRoute(),
         MeRoute(),
       ],
       transitionBuilder: (context, child, animation) =>
@@ -29,14 +27,8 @@ class MainTabLayoutPage extends StatelessWidget {
           case HomeRoute.name:
             title = localizations.home;
             break;
-          case LiveRoute.name:
-            title = localizations.live;
-            break;
-          case CartRoute.name:
-            title = localizations.cart;
-            break;
-          case MessageRoute.name:
-            title = localizations.message;
+          case HealthDataRoute.name:
+            title = localizations.health_data;
             break;
           case MeRoute.name:
             title = localizations.setting;
@@ -58,16 +50,8 @@ class MainTabLayoutPage extends StatelessWidget {
                 label: localizations.home,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.living_rounded),
-                label: localizations.live,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.message),
-                label: localizations.message,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.card_travel),
-                label: localizations.cart,
+                icon: const Icon(Icons.favorite_border),
+                label: localizations.health_data,
               ),
               NavigationDestination(
                 icon: const Icon(Icons.settings),

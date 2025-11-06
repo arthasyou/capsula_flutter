@@ -1,10 +1,8 @@
 {
     "@@locale": "zh",
     "language": "中文简体",
-    "app_name": "商城",
+    "app_name": "健康管家",
     "home": "主页",
-    "live": "直播",
-    "message": "消息",
-    "cart": "购物车",
+    "health_data": "健康数据",
     "setting": "我的"
 }

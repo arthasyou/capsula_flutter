@@ -11,17 +11,17 @@
 part of 'router.dart';
 
 /// generated route for
-/// [CartPage]
-class CartRoute extends PageRouteInfo<void> {
-  const CartRoute({List<PageRouteInfo>? children})
-    : super(CartRoute.name, initialChildren: children);
+/// [HealthDataPage]
+class HealthDataRoute extends PageRouteInfo<void> {
+  const HealthDataRoute({List<PageRouteInfo>? children})
+    : super(HealthDataRoute.name, initialChildren: children);
 
-  static const String name = 'CartRoute';
+  static const String name = 'HealthDataRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const CartPage();
+      return const HealthDataPage();
     },
   );
 }
@@ -38,22 +38,6 @@ class HomeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const HomePage();
-    },
-  );
-}
-
-/// generated route for
-/// [LivePage]
-class LiveRoute extends PageRouteInfo<void> {
-  const LiveRoute({List<PageRouteInfo>? children})
-    : super(LiveRoute.name, initialChildren: children);
-
-  static const String name = 'LiveRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const LivePage();
     },
   );
 }
@@ -86,22 +70,6 @@ class MeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MePage();
-    },
-  );
-}
-
-/// generated route for
-/// [MessagePage]
-class MessageRoute extends PageRouteInfo<void> {
-  const MessageRoute({List<PageRouteInfo>? children})
-    : super(MessageRoute.name, initialChildren: children);
-
-  static const String name = 'MessageRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const MessagePage();
     },
   );
 }

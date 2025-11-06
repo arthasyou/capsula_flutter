@@ -4,7 +4,7 @@
     "@language": {
         "description": "The current Language"
     },
-    "app_name": "Shopping",
+    "app_name": "Health Manager",
     "@app_name": {
         "description": "The app Name"
     },
@@ -12,17 +12,9 @@
     "@home": {
         "description": "home page"
     },
-    "live": "Live",
-    "@live": {
-        "description": "live page"
-    },
-    "message": "Message",
-    "@message": {
-        "description": "message page"
-    },
-    "cart": "Cart",
-    "@cart": {
-        "description": "shopping cart page"
+    "health_data": "Health Data",
+    "@health_data": {
+        "description": "health data page"
     },
     "setting": "Setting",
     "@setting": {
