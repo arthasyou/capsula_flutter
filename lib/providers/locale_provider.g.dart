@@ -44,7 +44,7 @@ final class LocaleNotifierProvider
   }
 }
 
-String _$localeNotifierHash() => r'899a9968016aabc69dbb4edf5cb090b853df6ba2';
+String _$localeNotifierHash() => r'd9cc39f8a221a9620a51c051fcd42e00fc9df2ca';
 
 /// Locale state management using Riverpod 3.0 Notifier pattern
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:capsula_flutter/theme/app_theme.dart';
@@ -6,10 +7,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'gen/app_localizations.dart';
 import 'l10n.dart';
 import 'providers/locale_provider.dart';
+import 'providers/theme_provider.dart';
 import 'routes/router.dart';
 
 void main() async {
   await dotenv.load(fileName: "assets/.env");
+
+  // 打印系统主题信息
+  final systemBrightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+  // ignore: avoid_print
+  print('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  // ignore: avoid_print
+  print('🚀 应用启动 - 系统主题检测');
+  // ignore: avoid_print
+  print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  // ignore: avoid_print
+  print('📱 当前系统主题: ${systemBrightness == Brightness.light ? "☀️ Light Mode" : "🌙 Dark Mode"}');
+  // ignore: avoid_print
+  print('📱 Brightness 枚举值: $systemBrightness');
+  // ignore: avoid_print
+  print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+
   runApp(ProviderScope(child: App()));
 }
 
@@ -22,10 +40,12 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeModeProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Demo',
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       theme: AppTheme.lightTheme(context),
       darkTheme: AppTheme.darkTheme(context),
       routerConfig: _appRouter.config(),

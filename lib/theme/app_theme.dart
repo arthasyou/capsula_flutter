@@ -34,17 +34,29 @@ class AppTheme {
       bottomSheetTheme: CustomBottomSheetTheme.lightBottomSheetTheme,
       scrollbarTheme: scrollbarThemeData,
       dataTableTheme: dataTableLightThemeData,
+      colorScheme: ColorScheme.light(
+        primary: ColorConstants.primary,
+        secondary: ColorConstants.secondary,
+        surface: Colors.white,
+        error: ColorConstants.error,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.black,
+        onSurfaceVariant: Colors.black.withOpacity(0.6),
+        onError: Colors.white,
+        surfaceContainerHighest: Colors.grey[100]!,
+      ),
     );
   }
 
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       fontFamily: "Plus Jakarta",
       primarySwatch: ColorConstants.primaryMaterialColor,
       primaryColor: ColorConstants.primary,
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: ColorConstants.dark,
       iconTheme: const IconThemeData(color: whiteColor),
       textTheme: CustomTextTheme.darkTextTheme,
       chipTheme: CustomChipTheme.darkChipTheme,
@@ -56,7 +68,19 @@ class AppTheme {
       appBarTheme: CustomAppBarTheme.darkAppBarTheme,
       bottomSheetTheme: CustomBottomSheetTheme.darkBottomSheetTheme,
       scrollbarTheme: scrollbarThemeData,
-      dataTableTheme: dataTableLightThemeData,
+      dataTableTheme: dataTableDarkThemeData,
+      colorScheme: ColorScheme.dark(
+        primary: ColorConstants.primary,
+        secondary: ColorConstants.secondary,
+        surface: ColorConstants.dark,
+        error: ColorConstants.error,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        onSurfaceVariant: Colors.white.withOpacity(0.6),
+        onError: Colors.white,
+        surfaceContainerHighest: Colors.grey[800]!,
+      ),
     );
   }
 }

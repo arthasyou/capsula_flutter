@@ -6,11 +6,7 @@ class DataImportDialog extends StatelessWidget {
   final DataCollectionMethod? method;
   final VoidCallback? onSave;
 
-  const DataImportDialog({
-    super.key,
-    this.method,
-    this.onSave,
-  });
+  const DataImportDialog({super.key, this.method, this.onSave});
 
   /// 显示对话框的静态方法
   static Future<void> show(
@@ -20,10 +16,7 @@ class DataImportDialog extends StatelessWidget {
   }) {
     return showDialog(
       context: context,
-      builder: (context) => DataImportDialog(
-        method: method,
-        onSave: onSave,
-      ),
+      builder: (context) => DataImportDialog(method: method, onSave: onSave),
     );
   }
 

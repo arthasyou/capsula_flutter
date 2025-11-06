@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../models/health_data_model.dart';
+import '../../theme/health_data_colors.dart';
 
 /// 健康数据卡片组件
 class HealthDataCard extends StatelessWidget {
@@ -54,13 +55,13 @@ class HealthDataCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _getColorForType(record.type).withValues(alpha: 0.2),
+            color: theme.getHealthDataBackgroundColor(record.type),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             record.typeDisplayName,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: _getColorForType(record.type),
+              color: theme.getHealthDataColor(record.type),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -148,23 +149,6 @@ class HealthDataCard extends StatelessWidget {
         );
       }).toList(),
     );
-  }
-
-  Color _getColorForType(HealthDataType type) {
-    switch (type) {
-      case HealthDataType.bloodPressure:
-        return Colors.blue;
-      case HealthDataType.bloodSugar:
-        return Colors.green;
-      case HealthDataType.heartRate:
-        return Colors.orange;
-      case HealthDataType.checkup:
-        return Colors.purple;
-      case HealthDataType.medication:
-        return Colors.red;
-      case HealthDataType.other:
-        return Colors.grey;
-    }
   }
 
   IconData _getIconForSource(DataSource source) {

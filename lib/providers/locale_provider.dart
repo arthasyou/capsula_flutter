@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../l10n.dart';
 
@@ -11,10 +10,9 @@ class LocaleNotifier extends _$LocaleNotifier {
   @override
   Locale build() {
     // Get system locale and find the best match from supported locales
-    final systemLocale = PlatformDispatcher.instance.locales;
-    print('System Locale: ${Platform.localeName}');
+    final systemLocale = PlatformDispatcher.instance.locale;
     // return systemLocale;
-    return _findBestMatchLocale(systemLocale.first);
+    return _findBestMatchLocale(systemLocale);
   }
 
   /// Find the best matching locale from supported locales
