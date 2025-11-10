@@ -14,7 +14,8 @@ void main() async {
   await dotenv.load(fileName: "assets/.env");
 
   // 打印系统主题信息
-  final systemBrightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+  final systemBrightness =
+      SchedulerBinding.instance.platformDispatcher.platformBrightness;
   // ignore: avoid_print
   print('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   // ignore: avoid_print
@@ -22,7 +23,9 @@ void main() async {
   // ignore: avoid_print
   print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   // ignore: avoid_print
-  print('📱 当前系统主题: ${systemBrightness == Brightness.light ? "☀️ Light Mode" : "🌙 Dark Mode"}');
+  print(
+    '📱 当前系统主题: ${systemBrightness == Brightness.light ? "☀️ Light Mode" : "🌙 Dark Mode"}',
+  );
   // ignore: avoid_print
   print('📱 Brightness 枚举值: $systemBrightness');
   // ignore: avoid_print
