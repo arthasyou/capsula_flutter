@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,6 +8,8 @@ import 'package:iconsax/iconsax.dart';
 import '../../models/health_asset.dart';
 import '../../models/health_data_model.dart';
 import '../../providers/health_asset_provider.dart';
+import '../../providers/sandbox_provider.dart';
+import '../../utils/file_viewer.dart';
 import '../../widgets/health_data/data_collection_grid.dart';
 import '../../widgets/health_data/data_import_dialog.dart';
 import '../../widgets/health_data/health_data_card.dart';
@@ -36,10 +40,7 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(
-            child: PageHeader(
-              title: '我的健康数据',
-              subtitle: '全方位记录和管理您的健康信息',
-            ),
+            child: PageHeader(title: '我的健康数据', subtitle: '全方位记录和管理您的健康信息'),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -151,30 +152,23 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
       data: (assets) {
         final filteredAssets = _applyFilters(assets);
         if (filteredAssets.isEmpty) {
-          return const SliverToBoxAdapter(
-            child: _EmptyHealthDataState(),
-          );
+          return const SliverToBoxAdapter(child: _EmptyHealthDataState());
         }
         final entries = filteredAssets
-            .map(
-              (asset) => (asset: asset, record: asset.toRecord()),
-            )
+            .map((asset) => (asset: asset, record: asset.toRecord()))
             .toList();
 
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final entry = entries[index];
-                return HealthDataCard(
-                  record: entry.record,
-                  onTap: () => _showAssetDetails(entry.asset),
-                  onView: () => _showAssetDetails(entry.asset),
-                );
-              },
-              childCount: entries.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final entry = entries[index];
+              return HealthDataCard(
+                record: entry.record,
+                onTap: () => _showAssetDetails(entry.asset),
+                onView: () => _previewAssetFile(entry.asset),
+              );
+            }, childCount: entries.length),
           ),
         );
       },
@@ -211,20 +205,29 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
     switch (_selectedFilter) {
       case '7days':
         filtered = filtered.where(
-          (asset) => asset.createdAt.isAfter(now.subtract(const Duration(days: 7))),
+          (asset) =>
+              asset.createdAt.isAfter(now.subtract(const Duration(days: 7))),
         );
         break;
       case 'checkup':
-        filtered = filtered.where((asset) => asset.dataType == HealthDataType.checkup);
+        filtered = filtered.where(
+          (asset) => asset.dataType == HealthDataType.checkup,
+        );
         break;
       case 'bp':
-        filtered = filtered.where((asset) => asset.dataType == HealthDataType.bloodPressure);
+        filtered = filtered.where(
+          (asset) => asset.dataType == HealthDataType.bloodPressure,
+        );
         break;
       case 'bs':
-        filtered = filtered.where((asset) => asset.dataType == HealthDataType.bloodSugar);
+        filtered = filtered.where(
+          (asset) => asset.dataType == HealthDataType.bloodSugar,
+        );
         break;
       case 'device':
-        filtered = filtered.where((asset) => asset.dataSource == DataSource.device);
+        filtered = filtered.where(
+          (asset) => asset.dataSource == DataSource.device,
+        );
         break;
       default:
         break;
@@ -241,21 +244,30 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
     DataImportDialog.show(
       context,
       method: method,
-      onSubmit: (draft) async {
+      onSubmit: (draft, {File? attachment}) async {
         try {
-          await ref
-              .read(healthAssetsProvider(query: _searchKeyword).notifier)
-              .addManualAsset(draft);
+          final notifier = ref.read(
+            healthAssetsProvider(query: _searchKeyword).notifier,
+          );
+          if (attachment != null) {
+            await notifier.addFileAsset(file: attachment, draft: draft);
+          } else {
+            await notifier.addManualAsset(draft);
+          }
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('健康数据已保存到本地沙盒')),
+              SnackBar(
+                content: Text(
+                  attachment != null ? '文件已导入到本地沙盒' : '健康数据已保存到本地沙盒',
+                ),
+              ),
             );
           }
         } catch (error) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('保存失败: $error')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('保存失败: $error')));
           }
           rethrow;
         }
@@ -307,32 +319,46 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
             children: [
               Text(
                 asset.filename,
-                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
               _DetailRow(label: '来源', value: asset.dataSource.displayName),
               _DetailRow(label: '类型', value: asset.dataType.displayName),
-              _DetailRow(label: '更新时间', value: _formatDateTime(asset.updatedAt)),
+              _DetailRow(
+                label: '更新时间',
+                value: _formatDateTime(asset.updatedAt),
+              ),
               _DetailRow(label: '文件路径', value: asset.path),
               if (asset.tags.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 6,
                   children: asset.tags
-                      .map((tag) => Chip(
-                            label: Text(tag),
-                            backgroundColor: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
-                          ))
+                      .map(
+                        (tag) => Chip(
+                          label: Text(tag),
+                          backgroundColor: theme.colorScheme.primaryContainer
+                              .withValues(alpha: 0.4),
+                        ),
+                      )
                       .toList(),
                 ),
               ],
               if (asset.note?.isNotEmpty == true) ...[
                 const SizedBox(height: 12),
-                Text(
-                  asset.note!,
-                  style: theme.textTheme.bodyMedium,
-                ),
+                Text(asset.note!, style: theme.textTheme.bodyMedium),
               ],
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _previewAssetFile(asset);
+                },
+                icon: const Icon(Iconsax.eye),
+                label: const Text('打开文件'),
+              ),
             ],
           ),
         );
@@ -341,9 +367,109 @@ class _HealthDataPageState extends ConsumerState<HealthDataPage> {
   }
 
   String _formatDateTime(DateTime value) {
-    final date = '${value.year}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
-    final time = '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
+    final date =
+        '${value.year}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
+    final time =
+        '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
     return '$date $time';
+  }
+
+  Future<void> _previewAssetFile(HealthAsset asset) async {
+    try {
+      final sandbox = ref.read(sandboxServiceProvider);
+      final file = sandbox.fileFor(asset.path) as File;
+      if (!await file.exists()) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('文件不存在或已被删除')));
+        }
+        return;
+      }
+
+      final supported = FileViewerUtils.isSupported(file.path);
+      if (!supported) {
+        if (!mounted) return;
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('暂不支持预览'),
+            content: Text('请通过系统文件管理器查看文件:\n${file.path}'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('知道了'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          final size = MediaQuery.of(context).size;
+          return Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: SizedBox(
+              width: size.width * 0.9,
+              height: size.height * 0.8,
+              child: FileViewerUtils.viewer(
+                filePath: file.path,
+                onOpen: (success) {
+                  if (!success && mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text('文件预览失败')));
+                  }
+                },
+                loadingWidget: const Center(child: CircularProgressIndicator()),
+                unsupportedWidget: _UnsupportedFileView(path: file.path),
+              ),
+            ),
+          );
+        },
+      );
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('无法打开文件: $error')));
+    }
+  }
+}
+
+class _UnsupportedFileView extends StatelessWidget {
+  const _UnsupportedFileView({required this.path});
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Iconsax.warning_2, size: 36),
+          const SizedBox(height: 12),
+          const Text(
+            '暂不支持预览该文件类型',
+            style: TextStyle(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            path,
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -371,12 +497,7 @@ class _DetailRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: theme.textTheme.bodyMedium,
-            ),
-          ),
+          Expanded(child: Text(value, style: theme.textTheme.bodyMedium)),
         ],
       ),
     );

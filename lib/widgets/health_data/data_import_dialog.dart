@@ -1,17 +1,17 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/health_asset.dart';
 import '../../models/health_data_model.dart';
 
-typedef HealthAssetSubmit = Future<void> Function(HealthAssetDraft draft);
+typedef HealthAssetSubmit =
+    Future<void> Function(HealthAssetDraft draft, {File? attachment});
 
 /// 数据导入对话框
 class DataImportDialog extends StatefulWidget {
-  const DataImportDialog({
-    super.key,
-    this.method,
-    this.onSubmit,
-  });
+  const DataImportDialog({super.key, this.method, this.onSubmit});
 
   final DataCollectionMethod? method;
   final HealthAssetSubmit? onSubmit;
@@ -24,10 +24,8 @@ class DataImportDialog extends StatefulWidget {
   }) {
     return showDialog(
       context: context,
-      builder: (context) => DataImportDialog(
-        method: method,
-        onSubmit: onSubmit,
-      ),
+      builder: (context) =>
+          DataImportDialog(method: method, onSubmit: onSubmit),
     );
   }
 
@@ -46,6 +44,9 @@ class _DataImportDialogState extends State<DataImportDialog> {
   HealthDataType _selectedType = HealthDataType.other;
   DateTime _recordedAt = DateTime.now();
   bool _isSaving = false;
+  PlatformFile? _pickedFile;
+  File? _selectedFile;
+  String? _fileError;
 
   @override
   void initState() {
@@ -67,7 +68,9 @@ class _DataImportDialogState extends State<DataImportDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return AlertDialog(
-      title: Text(widget.method != null ? '${widget.method!.title} - 数据导入' : '数据导入'),
+      title: Text(
+        widget.method != null ? '${widget.method!.title} - 数据导入' : '数据导入',
+      ),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -94,6 +97,10 @@ class _DataImportDialogState extends State<DataImportDialog> {
               _buildRecordedAtPicker(context),
               const SizedBox(height: 16),
               _buildSourceField(),
+              if (_selectedSource == DataSource.upload) ...[
+                const SizedBox(height: 16),
+                _buildFilePicker(theme),
+              ],
               const SizedBox(height: 16),
               TextFormField(
                 controller: _contentController,
@@ -145,10 +152,7 @@ class _DataImportDialogState extends State<DataImportDialog> {
       value: _selectedType,
       decoration: const InputDecoration(labelText: '数据类型'),
       items: HealthDataType.values.map((type) {
-        return DropdownMenuItem(
-          value: type,
-          child: Text(type.name),
-        );
+        return DropdownMenuItem(value: type, child: Text(type.name));
       }).toList(),
       onChanged: (value) {
         if (value != null) {
@@ -159,8 +163,10 @@ class _DataImportDialogState extends State<DataImportDialog> {
   }
 
   Widget _buildRecordedAtPicker(BuildContext context) {
-    final dateLabel = '${_recordedAt.year}-${_recordedAt.month.toString().padLeft(2, '0')}-${_recordedAt.day.toString().padLeft(2, '0')}';
-    final timeLabel = '${_recordedAt.hour.toString().padLeft(2, '0')}:${_recordedAt.minute.toString().padLeft(2, '0')}';
+    final dateLabel =
+        '${_recordedAt.year}-${_recordedAt.month.toString().padLeft(2, '0')}-${_recordedAt.day.toString().padLeft(2, '0')}';
+    final timeLabel =
+        '${_recordedAt.hour.toString().padLeft(2, '0')}:${_recordedAt.minute.toString().padLeft(2, '0')}';
     return Row(
       children: [
         Expanded(
@@ -187,16 +193,75 @@ class _DataImportDialogState extends State<DataImportDialog> {
       value: _selectedSource,
       decoration: const InputDecoration(labelText: '数据来源'),
       items: DataSource.values.map((source) {
-        return DropdownMenuItem(
-          value: source,
-          child: Text(source.displayName),
-        );
+        return DropdownMenuItem(value: source, child: Text(source.displayName));
       }).toList(),
       onChanged: (value) {
         if (value != null) {
-          setState(() => _selectedSource = value);
+          setState(() {
+            _selectedSource = value;
+            if (value != DataSource.upload) {
+              _pickedFile = null;
+              _selectedFile = null;
+              _fileError = null;
+            }
+          });
         }
       },
+    );
+  }
+
+  Widget _buildFilePicker(ThemeData theme) {
+    final file = _pickedFile;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '选择文件',
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: _isSaving ? null : _pickFile,
+          icon: const Icon(Icons.attach_file_rounded),
+          label: Text(file == null ? '选择要导入的文件' : '重新选择'),
+        ),
+        if (file != null) ...[
+          const SizedBox(height: 8),
+          Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(12),
+            child: ListTile(
+              leading: const Icon(Icons.insert_drive_file),
+              title: Text(
+                file.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(_formatFileSize(file.size ?? 0)),
+              trailing: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  setState(() {
+                    _pickedFile = null;
+                    _selectedFile = null;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
+        if (_fileError != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            _fileError!,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -242,13 +307,26 @@ class _DataImportDialogState extends State<DataImportDialog> {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
+
+    if (_selectedSource == DataSource.upload && _selectedFile == null) {
+      setState(() => _fileError = '请选择需要导入的文件');
+      return;
+    }
     final draft = HealthAssetDraft(
       title: _titleController.text.trim(),
-      note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
-      content: _contentController.text.trim().isEmpty ? null : _contentController.text.trim(),
+      note: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
+      content: _contentController.text.trim().isEmpty
+          ? null
+          : _contentController.text.trim(),
       dataSource: _selectedSource,
       dataType: _selectedType,
-      tags: _tagsController.text.split(',').map((tag) => tag.trim()).where((tag) => tag.isNotEmpty).toList(),
+      tags: _tagsController.text
+          .split(',')
+          .map((tag) => tag.trim())
+          .where((tag) => tag.isNotEmpty)
+          .toList(),
       metadata: {
         'recordedAt': _recordedAt.toIso8601String(),
         if (widget.method != null) 'method': widget.method!.id,
@@ -262,7 +340,7 @@ class _DataImportDialogState extends State<DataImportDialog> {
 
     setState(() => _isSaving = true);
     try {
-      await widget.onSubmit!(draft);
+      await widget.onSubmit!(draft, attachment: _selectedFile);
       if (mounted) {
         Navigator.pop(context);
       }
@@ -271,5 +349,61 @@ class _DataImportDialogState extends State<DataImportDialog> {
         setState(() => _isSaving = false);
       }
     }
+  }
+
+  Future<void> _pickFile() async {
+    setState(() => _fileError = null);
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: const [
+          'pdf',
+          'doc',
+          'docx',
+          'txt',
+          'xls',
+          'xlsx',
+          'ppt',
+          'pptx',
+          'jpg',
+          'jpeg',
+          'png',
+          'gif',
+        ],
+      );
+      if (result == null || result.files.isEmpty) {
+        return;
+      }
+      final file = result.files.single;
+      final path = file.path;
+      if (path == null) {
+        setState(() => _fileError = '无法读取所选文件');
+        return;
+      }
+      setState(() {
+        _pickedFile = file;
+        _selectedFile = File(path);
+      });
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('选择文件失败: $error')));
+    }
+  }
+
+  String _formatFileSize(int bytes) {
+    if (bytes <= 0) {
+      return '0 KB';
+    }
+    const units = ['B', 'KB', 'MB', 'GB'];
+    var size = bytes.toDouble();
+    var unitIndex = 0;
+    while (size >= 1024 && unitIndex < units.length - 1) {
+      size /= 1024;
+      unitIndex++;
+    }
+    return '${size.toStringAsFixed(size < 10 ? 1 : 0)} ${units[unitIndex]}';
   }
 }

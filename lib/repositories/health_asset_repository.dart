@@ -14,9 +14,9 @@ class HealthAssetRepository {
     HealthAssetDao? dao,
     AppDatabase? database,
     SandboxService? sandboxService,
-  })  : _dao = dao,
-        _database = database,
-        _sandboxService = sandboxService ?? SandboxService.instance;
+  }) : _dao = dao,
+       _database = database,
+       _sandboxService = sandboxService ?? SandboxService.instance;
 
   HealthAssetDao? _dao;
   final AppDatabase? _database;
@@ -33,7 +33,10 @@ class HealthAssetRepository {
     return dao;
   }
 
-  Future<List<HealthAsset>> fetchAssets({String? keyword, List<String>? tags}) async {
+  Future<List<HealthAsset>> fetchAssets({
+    String? keyword,
+    List<String>? tags,
+  }) async {
     final dao = await _requireDao();
     return dao.fetchAssets(keyword: keyword, tags: tags);
   }
@@ -98,6 +101,7 @@ class HealthAssetRepository {
     List<String> tags = const [],
     String? note,
     Map<String, dynamic>? metadata,
+    String? displayName,
   }) async {
     final service = _sandboxService;
     if (!service.isInitialized) {
@@ -112,8 +116,11 @@ class HealthAssetRepository {
     final stats = await _statFile(copied);
     final relativePath = p.relative(copied.path, from: service.paths.root);
     final now = DateTime.now();
+    final trimmedDisplayName = displayName?.trim();
     final asset = HealthAsset(
-      filename: p.basename(source.path),
+      filename: (trimmedDisplayName?.isNotEmpty == true)
+          ? trimmedDisplayName!
+          : p.basename(source.path),
       path: relativePath,
       mime: _inferMime(source.path),
       sizeBytes: stats.size,
@@ -143,8 +150,13 @@ class HealthAssetRepository {
   }
 
   String _sanitizeFileName(String value) {
-    final sanitized = value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '_');
-    return sanitized.replaceAll(RegExp('_+'), '_').replaceAll(RegExp(r'^_|_$'), '');
+    final sanitized = value.toLowerCase().replaceAll(
+      RegExp(r'[^a-z0-9]+'),
+      '_',
+    );
+    return sanitized
+        .replaceAll(RegExp('_+'), '_')
+        .replaceAll(RegExp(r'^_|_$'), '');
   }
 
   String _formatTimestamp(DateTime time) {
@@ -167,10 +179,16 @@ class HealthAssetRepository {
     if (mime == 'application/pdf') {
       return p.join('files', 'doc', 'pdf');
     }
-    if (mime.contains('word') || mime == 'application/msword' || mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    if (mime.contains('word') ||
+        mime == 'application/msword' ||
+        mime ==
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       return p.join('files', 'doc', 'word');
     }
-    if (mime.contains('excel') || mime == 'application/vnd.ms-excel' || mime == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    if (mime.contains('excel') ||
+        mime == 'application/vnd.ms-excel' ||
+        mime ==
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       return p.join('files', 'doc', 'excel');
     }
     return p.join('files', 'doc');
