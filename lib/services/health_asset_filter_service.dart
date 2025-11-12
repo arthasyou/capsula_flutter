@@ -1,6 +1,6 @@
-import '../models/health_asset.dart';
-import '../models/health_data_model.dart';
-import '../providers/health_data_view/health_data_view_provider.dart';
+import 'package:capsula_flutter/models/health_asset.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
+import 'package:capsula_flutter/providers/health_data_view/health_data_view_provider.dart';
 
 List<HealthAsset> applyHealthDataFilters(
   List<HealthAsset> assets,
@@ -12,12 +12,14 @@ List<HealthAsset> applyHealthDataFilters(
   switch (state.selectedFilter) {
     case '7days':
       filtered = filtered.where(
-        (asset) => asset.createdAt.isAfter(now.subtract(const Duration(days: 7))),
+        (asset) =>
+            asset.createdAt.isAfter(now.subtract(const Duration(days: 7))),
       );
       break;
     case 'checkup':
-      filtered =
-          filtered.where((asset) => asset.dataType == HealthDataType.checkup);
+      filtered = filtered.where(
+        (asset) => asset.dataType == HealthDataType.checkup,
+      );
       break;
     case 'bp':
       filtered = filtered.where(
@@ -30,15 +32,18 @@ List<HealthAsset> applyHealthDataFilters(
       );
       break;
     case 'device':
-      filtered =
-          filtered.where((asset) => asset.dataSource == DataSource.device);
+      filtered = filtered.where(
+        (asset) => asset.dataSource == DataSource.device,
+      );
       break;
     default:
       break;
   }
 
   if (state.selectedTag != '全部标签') {
-    filtered = filtered.where((asset) => asset.tags.contains(state.selectedTag));
+    filtered = filtered.where(
+      (asset) => asset.tags.contains(state.selectedTag),
+    );
   }
 
   return filtered.toList();

@@ -28,10 +28,7 @@ class HealthAssetDetailRow extends StatelessWidget {
           ),
           Expanded(
             flex: 3,
-            child: Text(
-              value,
-              style: theme.textTheme.bodyMedium,
-            ),
+            child: Text(value, style: theme.textTheme.bodyMedium),
           ),
         ],
       ),

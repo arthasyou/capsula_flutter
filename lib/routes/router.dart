@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import '../pages/auth/sign_in_page.dart';
-import '../pages/layouts/main_tab_layout.dart';
-import '../pages/tabs/home_page.dart';
-import '../pages/tabs/health_data_page.dart';
-import '../pages/tabs/me_page.dart';
+import 'package:capsula_flutter/pages/auth/sign_in_page.dart';
+import 'package:capsula_flutter/pages/layouts/main_tab_layout.dart';
+import 'package:capsula_flutter/pages/tabs/health_data_page.dart';
+import 'package:capsula_flutter/pages/tabs/home_page.dart';
+import 'package:capsula_flutter/pages/tabs/me_page.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')

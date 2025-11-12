@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../l10n.dart';
-import '../../providers/locale/locale_provider.dart';
-import '../../providers/theme/theme_provider.dart';
+import 'package:capsula_flutter/l10n.dart';
+import 'package:capsula_flutter/providers/locale/locale_provider.dart';
+import 'package:capsula_flutter/providers/theme/theme_provider.dart';
 
 @RoutePage()
 class MePage extends ConsumerWidget {
@@ -27,7 +27,9 @@ class MePage extends ConsumerWidget {
                     end: Alignment.bottomRight,
                     colors: [
                       Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                      Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.7),
                     ],
                   ),
                 ),
@@ -83,9 +85,9 @@ class _ThemeSettingCard extends ConsumerWidget {
                 const SizedBox(width: 12),
                 Text(
                   '主题外观',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -95,7 +97,9 @@ class _ThemeSettingCard extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -103,13 +107,17 @@ class _ThemeSettingCard extends ConsumerWidget {
                   _buildInfoRow(
                     context,
                     '系统主题',
-                    systemBrightness == Brightness.light ? '☀️ Light' : '🌙 Dark',
+                    systemBrightness == Brightness.light
+                        ? '☀️ Light'
+                        : '🌙 Dark',
                   ),
                   const Divider(height: 16),
                   _buildInfoRow(
                     context,
                     '实际显示',
-                    effectiveBrightness == Brightness.light ? '☀️ Light 模式' : '🌙 Dark 模式',
+                    effectiveBrightness == Brightness.light
+                        ? '☀️ Light 模式'
+                        : '🌙 Dark 模式',
                     highlight: true,
                   ),
                 ],
@@ -175,25 +183,29 @@ class _ThemeSettingCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, String label, String value,
-      {bool highlight = false}) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    String label,
+    String value, {
+    bool highlight = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         Text(
           value,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: highlight ? FontWeight.bold : FontWeight.w600,
-                color: highlight
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
-              ),
+            fontWeight: highlight ? FontWeight.bold : FontWeight.w600,
+            color: highlight
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ],
     );
@@ -246,11 +258,11 @@ class _ThemeModeButton extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+              ),
             ),
           ],
         ),
@@ -282,9 +294,9 @@ class _LanguageSettingCard extends ConsumerWidget {
                 const SizedBox(width: 12),
                 Text(
                   '语言设置',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -317,25 +329,27 @@ class _LanguageSettingCard extends ConsumerWidget {
                       border: Border.all(
                         color: isSelected
                             ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                            : Theme.of(
+                                context,
+                              ).colorScheme.outline.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          flag,
-                          style: const TextStyle(fontSize: 24),
-                        ),
+                        Text(flag, style: const TextStyle(fontSize: 24)),
                         const SizedBox(width: 8),
                         Text(
                           name,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
                                 color: isSelected
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w600,
                               ),
                         ),
                       ],

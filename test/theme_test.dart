@@ -20,20 +20,24 @@ void main() {
       final darkTheme = ThemeData.dark();
 
       // Test blood pressure colors
-      final lightBpColor =
-          lightTheme.getHealthDataColor(HealthDataType.bloodPressure);
-      final darkBpColor =
-          darkTheme.getHealthDataColor(HealthDataType.bloodPressure);
+      final lightBpColor = lightTheme.getHealthDataColor(
+        HealthDataType.bloodPressure,
+      );
+      final darkBpColor = darkTheme.getHealthDataColor(
+        HealthDataType.bloodPressure,
+      );
 
       expect(lightBpColor, isNot(equals(darkBpColor)));
       expect(lightBpColor, const Color(0xFF2196F3)); // Light mode blue
       expect(darkBpColor, const Color(0xFF64B5F6)); // Dark mode light blue
 
       // Test blood sugar colors
-      final lightBsColor =
-          lightTheme.getHealthDataColor(HealthDataType.bloodSugar);
-      final darkBsColor =
-          darkTheme.getHealthDataColor(HealthDataType.bloodSugar);
+      final lightBsColor = lightTheme.getHealthDataColor(
+        HealthDataType.bloodSugar,
+      );
+      final darkBsColor = darkTheme.getHealthDataColor(
+        HealthDataType.bloodSugar,
+      );
 
       expect(lightBsColor, isNot(equals(darkBsColor)));
       expect(lightBsColor, const Color(0xFF4CAF50)); // Light mode green
@@ -42,11 +46,12 @@ void main() {
 
     test('Background colors should have correct alpha', () {
       final theme = ThemeData.light();
-      final bgColor =
-          theme.getHealthDataBackgroundColor(HealthDataType.bloodPressure);
+      final bgColor = theme.getHealthDataBackgroundColor(
+        HealthDataType.bloodPressure,
+      );
 
       // Background color should have 0.2 alpha
-      expect(bgColor.alpha, closeTo(51, 1)); // 0.2 * 255 ≈ 51
+      expect((bgColor.a * 255).round(), closeTo(51, 1)); // 0.2 * 255 ≈ 51
     });
 
     test('All health data types should have colors defined', () {

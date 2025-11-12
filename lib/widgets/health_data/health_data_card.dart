@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../models/health_data_model.dart';
-import '../../theme/health_data_colors.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
+import 'package:capsula_flutter/theme/health_data_colors.dart';
 
 /// 健康数据卡片组件
 class HealthDataCard extends StatelessWidget {
@@ -87,9 +87,7 @@ class HealthDataCard extends StatelessWidget {
   Widget _buildContent(ThemeData theme) {
     return Text(
       record.content,
-      style: theme.textTheme.bodyMedium?.copyWith(
-        fontWeight: FontWeight.w500,
-      ),
+      style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
     );
   }
 
@@ -131,10 +129,7 @@ class HealthDataCard extends StatelessWidget {
       runSpacing: 6,
       children: record.tags.map((tag) {
         return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),

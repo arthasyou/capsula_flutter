@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../models/health_asset.dart';
-import '../../models/health_data_model.dart';
+import 'package:capsula_flutter/models/health_asset.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
 import 'health_asset_detail_row.dart';
 
 class HealthAssetDetailSheet extends StatelessWidget {
@@ -22,10 +22,8 @@ class HealthAssetDetailSheet extends StatelessWidget {
   }) {
     return showModalBottomSheet(
       context: context,
-      builder: (context) => HealthAssetDetailSheet(
-        asset: asset,
-        onPreview: onPreview,
-      ),
+      builder: (context) =>
+          HealthAssetDetailSheet(asset: asset, onPreview: onPreview),
     );
   }
 
@@ -49,10 +47,7 @@ class HealthAssetDetailSheet extends StatelessWidget {
             label: '来源',
             value: asset.dataSource.displayName,
           ),
-          HealthAssetDetailRow(
-            label: '类型',
-            value: asset.dataType.displayName,
-          ),
+          HealthAssetDetailRow(label: '类型', value: asset.dataType.displayName),
           HealthAssetDetailRow(
             label: '更新时间',
             value: _formatDateTime(asset.updatedAt),
@@ -66,10 +61,8 @@ class HealthAssetDetailSheet extends StatelessWidget {
                   .map(
                     (tag) => Chip(
                       label: Text(tag),
-                      backgroundColor:
-                          theme.colorScheme.primaryContainer.withValues(
-                        alpha: 0.4,
-                      ),
+                      backgroundColor: theme.colorScheme.primaryContainer
+                          .withValues(alpha: 0.4),
                     ),
                   )
                   .toList(),

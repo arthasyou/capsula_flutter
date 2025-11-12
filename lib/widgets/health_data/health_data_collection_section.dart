@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../models/health_data_model.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
 import 'data_collection_grid.dart';
 
 class HealthDataCollectionSection extends StatelessWidget {
-  const HealthDataCollectionSection({
-    super.key,
-    required this.onMethodTap,
-  });
+  const HealthDataCollectionSection({super.key, required this.onMethodTap});
 
   final void Function(DataCollectionMethod method) onMethodTap;
 

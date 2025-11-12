@@ -6,8 +6,8 @@ class SandboxService {
   static final SandboxService instance = SandboxService._();
 
   SandboxPaths get paths => throw UnsupportedError(
-        'SandboxService is not supported on this platform.',
-      );
+    'SandboxService is not supported on this platform.',
+  );
 
   bool get isInitialized => false;
 
@@ -20,8 +20,8 @@ class SandboxService {
   }
 
   Never _unsupported() => throw UnsupportedError(
-        'SandboxService is not supported on this platform.',
-      );
+    'SandboxService is not supported on this platform.',
+  );
 
   dynamic fileFor(String relativePath) => _unsupported();
 

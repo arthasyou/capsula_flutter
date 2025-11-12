@@ -28,7 +28,9 @@ class SandboxService {
     }
 
     final supportDir = await _resolveBaseDirectory();
-    final rootDir = await _ensureDirectory(p.join(supportDir.path, 'AppSandbox'));
+    final rootDir = await _ensureDirectory(
+      p.join(supportDir.path, 'AppSandbox'),
+    );
     final dbDir = await _ensureDirectory(p.join(rootDir.path, 'db'));
     final filesDir = await _ensureDirectory(p.join(rootDir.path, 'files'));
     final imagesDir = await _ensureDirectory(p.join(filesDir.path, 'images'));
@@ -39,7 +41,9 @@ class SandboxService {
     final excelDir = await _ensureDirectory(p.join(docDir.path, 'excel'));
     final configDir = await _ensureDirectory(p.join(rootDir.path, 'config'));
     final secureDir = await _ensureDirectory(p.join(rootDir.path, 'secure'));
-    final keyStoreDir = await _ensureDirectory(p.join(secureDir.path, 'key_store'));
+    final keyStoreDir = await _ensureDirectory(
+      p.join(secureDir.path, 'key_store'),
+    );
 
     final settingsFile = File(p.join(configDir.path, 'settings.json'));
     if (!settingsFile.existsSync()) {
@@ -111,7 +115,9 @@ class SandboxService {
     if (!await targetDirectory.exists()) {
       await targetDirectory.create(recursive: true);
     }
-    final destination = File(p.join(targetDirectory.path, fileName ?? p.basename(source.path)));
+    final destination = File(
+      p.join(targetDirectory.path, fileName ?? p.basename(source.path)),
+    );
     return source.copy(destination.path);
   }
 }

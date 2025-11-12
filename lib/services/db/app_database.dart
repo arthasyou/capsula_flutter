@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 
-import '../storage/sandbox_service.dart';
+import 'package:capsula_flutter/services/storage/sandbox_service.dart';
 import 'app_database_connection_stub.dart'
     if (dart.library.html) 'app_database_connection_web.dart'
     if (dart.library.io) 'app_database_connection_io.dart';

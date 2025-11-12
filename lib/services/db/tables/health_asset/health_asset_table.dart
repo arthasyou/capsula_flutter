@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
-import '../../../../models/health_asset.dart';
-import '../../app_database.dart';
+import 'package:capsula_flutter/models/health_asset.dart';
+import 'package:capsula_flutter/services/db/app_database.dart';
 
 part 'health_asset_table.g.dart';
 

@@ -73,11 +73,15 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
     // ignore: avoid_print
     print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     // ignore: avoid_print
-    print('📱 系统主题: ${systemBrightness == Brightness.light ? "☀️ Light" : "🌙 Dark"}');
+    print(
+      '📱 系统主题: ${systemBrightness == Brightness.light ? "☀️ Light" : "🌙 Dark"}',
+    );
     // ignore: avoid_print
     print('⚙️  应用主题模式: ${_themeModeToString(state)}');
     // ignore: avoid_print
-    print('✨ 实际使用主题: ${effectiveBrightness == Brightness.light ? "☀️ Light" : "🌙 Dark"}');
+    print(
+      '✨ 实际使用主题: ${effectiveBrightness == Brightness.light ? "☀️ Light" : "🌙 Dark"}',
+    );
     // ignore: avoid_print
     print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   }

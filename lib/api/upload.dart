@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import '../services/http/api_service.dart';
-import '../models/upload/upload_response.dart';
+import 'package:capsula_flutter/models/upload/upload_response.dart';
+import 'package:capsula_flutter/services/http/api_service.dart';
 
 /// Get upload token from File server
 /// 从File服务器获取上传临时token和URL

@@ -39,11 +39,7 @@ class HealthTag {
   final String name;
   final String? color;
 
-  const HealthTag({
-    required this.id,
-    required this.name,
-    this.color,
-  });
+  const HealthTag({required this.id, required this.name, this.color});
 
   factory HealthTag.fromJson(Map<String, dynamic> json) =>
       _$HealthTagFromJson(json);

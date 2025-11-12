@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/constants.dart';
+import 'package:capsula_flutter/constants/constants.dart';
 
 const InputDecorationTheme lightInputDecorationTheme = InputDecorationTheme(
   fillColor: lightGreyColor,

@@ -46,8 +46,9 @@ class TagFilters extends StatelessWidget {
               label: Text(tag),
               selected: isSelected,
               onSelected: (selected) => onTagSelected(tag),
-              backgroundColor:
-                  theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+              backgroundColor: theme.colorScheme.primaryContainer.withValues(
+                alpha: 0.3,
+              ),
               selectedColor: theme.colorScheme.primary,
               labelStyle: TextStyle(
                 color: isSelected

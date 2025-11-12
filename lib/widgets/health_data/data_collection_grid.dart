@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../models/health_data_model.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
 
 /// 数据采集网格组件
 class DataCollectionGrid extends StatelessWidget {
   final Function(DataCollectionMethod) onMethodTap;
 
-  const DataCollectionGrid({
-    super.key,
-    required this.onMethodTap,
-  });
+  const DataCollectionGrid({super.key, required this.onMethodTap});
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +36,7 @@ class _CollectionMethodCard extends StatelessWidget {
   final DataCollectionMethod method;
   final VoidCallback onTap;
 
-  const _CollectionMethodCard({
-    required this.method,
-    required this.onTap,
-  });
+  const _CollectionMethodCard({required this.method, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

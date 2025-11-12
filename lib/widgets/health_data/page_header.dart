@@ -5,11 +5,7 @@ class PageHeader extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const PageHeader({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
+  const PageHeader({super.key, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +15,7 @@ class PageHeader extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(24),
-        ),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
             color: theme.colorScheme.primary.withValues(alpha: 0.1),

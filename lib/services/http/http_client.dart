@@ -34,13 +34,10 @@ class HttpClient {
   }) {
     _dio = Dio(
       BaseOptions(
-        baseUrl: baseUrl ?? '',  // 使用空字符串作为默认值（上传到S3时使用完整URL）
+        baseUrl: baseUrl ?? '', // 使用空字符串作为默认值（上传到S3时使用完整URL）
         connectTimeout: connectTimeout,
         receiveTimeout: receiveTimeout,
-        headers: {
-          'Accept': 'application/json',
-          ...?headers,
-        },
+        headers: {'Accept': 'application/json', ...?headers},
         // Content-Type will be set automatically to multipart/form-data
       ),
     );

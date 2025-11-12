@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import '../providers/theme/theme_provider.dart';
+import 'package:capsula_flutter/providers/theme/theme_provider.dart';
 
 /// 主题切换器组件 - 用于调试和手动切换主题
 class ThemeSwitcher extends ConsumerWidget {
@@ -31,9 +31,9 @@ class ThemeSwitcher extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   '主题设置',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -43,7 +43,9 @@ class ThemeSwitcher extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -52,7 +54,9 @@ class ThemeSwitcher extends ConsumerWidget {
                   _buildStatusRow(
                     context,
                     '系统主题',
-                    systemBrightness == Brightness.light ? '☀️ Light' : '🌙 Dark',
+                    systemBrightness == Brightness.light
+                        ? '☀️ Light'
+                        : '🌙 Dark',
                   ),
                   const Divider(height: 16),
                   _buildStatusRow(
@@ -64,7 +68,9 @@ class ThemeSwitcher extends ConsumerWidget {
                   _buildStatusRow(
                     context,
                     '实际使用',
-                    effectiveBrightness == Brightness.light ? '☀️ Light 模式' : '🌙 Dark 模式',
+                    effectiveBrightness == Brightness.light
+                        ? '☀️ Light 模式'
+                        : '🌙 Dark 模式',
                     highlight: true,
                   ),
                 ],
@@ -76,9 +82,9 @@ class ThemeSwitcher extends ConsumerWidget {
             // 主题切换按钮
             Text(
               '选择主题模式',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 12),
             Row(
@@ -129,17 +135,17 @@ class ThemeSwitcher extends ConsumerWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         Text(
           value,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: highlight ? FontWeight.bold : FontWeight.w600,
-                color: highlight
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
-              ),
+            fontWeight: highlight ? FontWeight.bold : FontWeight.w600,
+            color: highlight
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ],
     );
@@ -201,11 +207,11 @@ class _ThemeModeButton extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
           ],
         ),

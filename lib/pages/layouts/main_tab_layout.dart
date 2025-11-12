@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../../gen/app_localizations.dart';
-import '../../routes/router.dart';
-import '../../widgets/language_widget.dart';
+import 'package:capsula_flutter/gen/app_localizations.dart';
+import 'package:capsula_flutter/routes/router.dart';
+import 'package:capsula_flutter/widgets/language_widget.dart';
 
 @RoutePage()
 class MainTabLayoutPage extends StatelessWidget {
@@ -13,11 +13,7 @@ class MainTabLayoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return AutoTabsRouter(
-      routes: const [
-        HomeRoute(),
-        HealthDataRoute(),
-        MeRoute(),
-      ],
+      routes: const [HomeRoute(), HealthDataRoute(), MeRoute()],
       transitionBuilder: (context, child, animation) =>
           FadeTransition(opacity: animation, child: child),
       builder: (context, child) {

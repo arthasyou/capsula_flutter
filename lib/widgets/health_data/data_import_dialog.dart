@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/health_asset.dart';
-import '../../models/health_data_model.dart';
+import 'package:capsula_flutter/models/health_asset.dart';
+import 'package:capsula_flutter/models/health_data_model.dart';
 
 typedef HealthAssetSubmit =
     Future<void> Function(HealthAssetDraft draft, {File? attachment});

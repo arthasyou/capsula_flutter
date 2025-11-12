@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capsula_flutter/constants/colors.dart';
 
-import '../constants/constants.dart';
+import 'package:capsula_flutter/constants/constants.dart';
 import 'button_theme.dart';
 import 'custom_themes/appbar_theme.dart';
 import 'custom_themes/bottom_sheet_theme.dart';

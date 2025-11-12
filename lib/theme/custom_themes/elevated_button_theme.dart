@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
+import 'package:capsula_flutter/constants/colors.dart';
 
 class CustomElevatedButtonTheme {
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
@@ -12,7 +12,10 @@ class CustomElevatedButtonTheme {
       side: const BorderSide(color: ColorConstants.primary),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
-          fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   );
@@ -27,7 +30,10 @@ class CustomElevatedButtonTheme {
       side: const BorderSide(color: ColorConstants.primary),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
-          fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   );

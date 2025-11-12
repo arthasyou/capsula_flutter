@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../models/health_asset.dart';
-import '../../providers/health_data_view/health_data_view_provider.dart';
-import '../../services/health_asset_filter_service.dart';
-import '../../widgets/health_data/empty_health_data_state.dart';
+import 'package:capsula_flutter/models/health_asset.dart';
+import 'package:capsula_flutter/providers/health_data_view/health_data_view_provider.dart';
+import 'package:capsula_flutter/services/health_asset_filter_service.dart';
+import 'package:capsula_flutter/widgets/health_data/empty_health_data_state.dart';
 import 'health_data_card.dart';
 
 class HealthDataAssetList extends StatelessWidget {
@@ -38,17 +38,14 @@ class HealthDataAssetList extends StatelessWidget {
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final entry = entries[index];
-                return HealthDataCard(
-                  record: entry.record,
-                  onTap: () => onShowDetails(entry.asset),
-                  onView: () => onPreview(entry.asset),
-                );
-              },
-              childCount: entries.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final entry = entries[index];
+              return HealthDataCard(
+                record: entry.record,
+                onTap: () => onShowDetails(entry.asset),
+                onView: () => onPreview(entry.asset),
+              );
+            }, childCount: entries.length),
           ),
         );
       },

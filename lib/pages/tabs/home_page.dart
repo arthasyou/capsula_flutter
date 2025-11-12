@@ -10,10 +10,7 @@ class HomePage extends StatelessWidget {
     return const Center(
       child: Text(
         'Home',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
     );
   }

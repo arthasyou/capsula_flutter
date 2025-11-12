@@ -120,14 +120,7 @@ class HealthAsset {
           : (note?.isNotEmpty == true ? note! : filename),
       dateTime: updatedAt,
       source: dataSource,
-      tags: tags
-          .map(
-            (tag) => HealthTag(
-              id: tag,
-              name: tag,
-            ),
-          )
-          .toList(),
+      tags: tags.map((tag) => HealthTag(id: tag, name: tag)).toList(),
       notes: fallbackNote,
       metadata: metadata,
     );
@@ -173,10 +166,8 @@ class HealthAssetDraft {
   final List<String> tags;
   final Map<String, dynamic>? metadata;
 
-  List<String> get normalizedTags => tags
-      .map((tag) => tag.trim())
-      .where((tag) => tag.isNotEmpty)
-      .toList();
+  List<String> get normalizedTags =>
+      tags.map((tag) => tag.trim()).where((tag) => tag.isNotEmpty).toList();
 
   HealthAssetDraft copyWith({
     String? title,
