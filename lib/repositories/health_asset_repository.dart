@@ -4,7 +4,7 @@ import 'package:capsula_flutter/models/health_asset.dart';
 import 'package:capsula_flutter/models/health_data_model.dart';
 import 'package:capsula_flutter/services/db/app_database.dart';
 import 'package:capsula_flutter/services/db/tables/health_asset/health_asset_table.dart';
-import 'package:capsula_flutter/services/storage/sandbox_service_stub.dart';
+import 'package:capsula_flutter/services/storage/sandbox_service.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 
