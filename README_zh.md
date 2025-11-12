@@ -50,7 +50,8 @@ flutter test
 
 - `lib/main.dart`：应用入口，负责 `.env` 加载、沙盒/数据库初始化、路由配置。
 - `lib/providers/`：Riverpod 状态 + 生成的 `.g.dart` 文件。
-- `lib/services/`：HTTP 客户端、沙盒工具、Drift 连接、健康数据控制器等。
+- `lib/services/`：HTTP 客户端、数据库连接、沙盒工具、健康数据控制器等。
+- `lib/helpers/`：更高层的辅助/仓储逻辑（如 `health_asset/health_asset_repository.dart`）。
 - `lib/pages/`：AutoRoute 页面（登录、主标签页等）。
 - `lib/widgets/health_data/`：复用性强的健康数据组件（采集网格、筛选器、卡片、弹窗）。
 - `lib/theme/`：主题配置与子主题。

@@ -50,7 +50,8 @@ Unit/widget tests currently cover theming plus health-data providers and filters
 
 - `lib/main.dart`: App bootstrap (env loading, sandbox + DB init, Router setup).
 - `lib/providers/`: Riverpod Notifiers + generated code.
-- `lib/services/`: HTTP clients, sandbox helpers, Drift setup, health-data controllers.
+- `lib/services/`: HTTP clients, database connectors, sandbox utilities, health-data controllers.
+- `lib/helpers/`: Higher-level helpers or repositories (e.g., `health_asset/health_asset_repository.dart`).
 - `lib/pages/`: AutoRoute pages (auth, tabs, layouts).
 - `lib/widgets/health_data/`: Reusable widgets (collection grid, filters, cards, dialogs).
 - `lib/theme/`: Theme data, sub-theme definitions, health-data color helpers.
