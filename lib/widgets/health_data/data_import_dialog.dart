@@ -149,7 +149,7 @@ class _DataImportDialogState extends State<DataImportDialog> {
 
   Widget _buildTypeSelector(ThemeData theme) {
     return DropdownButtonFormField<HealthDataType>(
-      value: _selectedType,
+      initialValue: _selectedType,
       decoration: const InputDecoration(labelText: '数据类型'),
       items: HealthDataType.values.map((type) {
         return DropdownMenuItem(value: type, child: Text(type.name));
@@ -190,7 +190,7 @@ class _DataImportDialogState extends State<DataImportDialog> {
 
   Widget _buildSourceField() {
     return DropdownButtonFormField<DataSource>(
-      value: _selectedSource,
+      initialValue: _selectedSource,
       decoration: const InputDecoration(labelText: '数据来源'),
       items: DataSource.values.map((source) {
         return DropdownMenuItem(value: source, child: Text(source.displayName));
@@ -239,7 +239,7 @@ class _DataImportDialogState extends State<DataImportDialog> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              subtitle: Text(_formatFileSize(file.size ?? 0)),
+              subtitle: Text(_formatFileSize(file.size)),
               trailing: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
